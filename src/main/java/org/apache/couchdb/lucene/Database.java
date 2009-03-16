@@ -111,7 +111,6 @@ public final class Database {
 
 	private synchronized String execute(final HttpMethodBase method) throws HttpException, IOException {
 		try {
-
 			final int sc = CLIENT.executeMethod(method);
 			if (sc == 401) {
 				throw new HttpException("Unauthorized.");

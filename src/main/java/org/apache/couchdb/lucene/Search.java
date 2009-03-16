@@ -16,6 +16,28 @@ import org.apache.lucene.store.NIOFSDirectory;
  */
 public final class Search {
 
+	private static class Stats {
+
+		private long count = 0;
+		private long duration = 0;
+		private long max = 0;
+
+		private void add(final long duration) {
+			this.count++;
+			this.duration += duration;
+			this.max = Math.max(this.max, duration);
+		}
+
+		private void addTo(final JSONObject obj) {
+			obj.put("search_count", count);
+			obj.put("mean", count == 0 ? 0 : duration / count);
+			obj.put("max", max);
+		}
+
+	}
+
+	private static final Stats STATS = new Stats();
+
 	public static void main(final String[] args) {
 		try {
 			IndexReader reader = null;
@@ -71,9 +93,12 @@ public final class Search {
 				try {
 					// A query.
 					if (query.has("q")) {
+						final StopWatch watch = new StopWatch();
 						final SearchRequest request = new SearchRequest(obj);
 						final String result = request.execute(searcher);
 						System.out.println(result);
+						watch.lap("search");
+						STATS.add(watch.getElapsed("search"));
 						continue;
 					}
 					// info.
@@ -82,6 +107,7 @@ public final class Search {
 						json.put("doc_count", reader.numDocs());
 						json.put("doc_del_count", reader.numDeletedDocs());
 						json.put("disk_size", size(reader.directory()));
+						STATS.addTo(json);
 						reader.directory();
 
 						final JSONObject info = new JSONObject();
