@@ -23,7 +23,7 @@ final class Config {
 
 	static final Analyzer ANALYZER = new LanguageIdentifyingAnalyzer(); //new StandardAnalyzer();
 
-	static final String DEFAULT_FIELD = System.getProperty("couchdb.lucene.default_field", "body");
+	static final String DEFAULT_FIELD = System.getProperty("couchdb.lucene.default_field", Config.BODY);
 
 	static final QueryParser QP = new QueryParser(DEFAULT_FIELD, ANALYZER);
 
