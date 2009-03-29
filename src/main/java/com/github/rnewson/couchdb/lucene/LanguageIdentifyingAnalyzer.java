@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
 import org.apache.lucene.analysis.el.GreekAnalyzer;
@@ -57,13 +58,40 @@ public final class LanguageIdentifyingAnalyzer extends Analyzer {
 		final int read = reader.read(buf);
 		final String result = LanguageIdentifier.identifyLanguage(new String(buf, 0, read));
 		reader.reset();
-
+		System.err.println(result);
 		return result;
 	}
 
 	@Override
 	public TokenStream tokenStream(final String fieldName, Reader reader) {
-		throw new UnsupportedOperationException();
+		if (!reader.markSupported())
+			reader = new BufferedReader(reader);
+
+		String lang;
+		try {
+			lang = identify(reader);
+		} catch (final IOException e) {
+			return new TokenStream() {
+
+				@Override
+				public Token next() throws IOException {
+					throw e;
+				}
+
+				@Override
+				public Token next(Token reusableToken) throws IOException {
+					throw e;
+				}
+
+			};
+		}
+
+		Analyzer analyzer = analyzerMap.get(lang);
+		if (analyzer == null) {
+			analyzer = defaultAnalyzer;
+		}
+
+		return analyzer.tokenStream(fieldName, reader);
 	}
 
 }
