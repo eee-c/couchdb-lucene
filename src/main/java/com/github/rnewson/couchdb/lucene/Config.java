@@ -17,12 +17,11 @@ package com.github.rnewson.couchdb.lucene;
  */
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.QueryParser;
 
 final class Config {
 
-	static final Analyzer ANALYZER = new StandardAnalyzer();
+	static final Analyzer ANALYZER = new LanguageIdentifyingAnalyzer(); //new StandardAnalyzer();
 
 	static final String DEFAULT_FIELD = System.getProperty("couchdb.lucene.default_field", "body");
 
