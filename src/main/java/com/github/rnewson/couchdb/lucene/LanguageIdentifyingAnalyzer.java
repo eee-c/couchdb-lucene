@@ -58,7 +58,7 @@ public final class LanguageIdentifyingAnalyzer extends Analyzer {
 		final int read = reader.read(buf);
 		final String result = LanguageIdentifier.identifyLanguage(new String(buf, 0, read));
 		reader.reset();
-		System.err.println(result);
+
 		return result;
 	}
 
