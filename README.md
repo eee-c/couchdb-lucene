@@ -117,7 +117,7 @@ Couchdb-lucene uses <a href="http://lucene.apache.org/tika/">Apache Tika</a> to 
 
 <h1>Searching with couchdb-lucene</h1>
 
-You can perform all types of queries using Lucene's default <a href="http://lucene.apache.org/java/2_4_0/queryparsersyntax.html">query syntax</a>. The following parameters can be passed for more sophisticated searches;
+You can perform all types of queries using Lucene's default <a href="http://lucene.apache.org/java/2_4_0/queryparsersyntax.html">query syntax</a>. The _body field is searched by default which will include the extracted text from all attachments. The following parameters can be passed for more sophisticated searches;
 
 <dl>
 <dt>q</dt><dd>the query to run (e.g, subject:hello)</dd>
@@ -283,7 +283,7 @@ couchdb-lucene respects several system properties;
 You can override these properties like this;
 
 <pre>
-fti=/usr/bin/java -D couchdb.lucene.dir=/tmp \
+fti=/usr/bin/java -Dcouchdb.lucene.dir=/tmp \
 -cp /home/rnewson/Source/couchdb-lucene/target/classes:\
 /home/rnewson/Source/couchdb-lucene/target/dependency\
 com.github.rnewson.couchdb.lucene.Main
