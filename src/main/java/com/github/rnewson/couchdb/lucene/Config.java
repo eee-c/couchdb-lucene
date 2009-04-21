@@ -24,7 +24,7 @@ final class Config {
 
     static final Analyzer ANALYZER = new MyAnalyzer();
 
-    static final QueryParser QP = new QueryParser("", ANALYZER);
+    static final QueryParser QP = new QueryParser("all", ANALYZER);
 
     static final String DB = "_db";
 
